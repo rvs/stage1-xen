@@ -16,7 +16,7 @@ mkdir -p $tmpdir/sys
 mkdir -p $tmpdir/lib
 mkdir -p $tmpdir/var
 mkdir -p $tmpdir/mnt
-cp `which busybox` $tmpdir/bin
+cp `which busybox.static` $tmpdir/bin/busybox
 $tmpdir/bin/busybox --install $tmpdir/bin
 
 cp $init $tmpdir/init

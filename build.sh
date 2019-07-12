@@ -25,7 +25,7 @@ then
 fi
 
 execs="enter run stop"
-netplugins="main/ptp main/bridge main/macvlan main/ipvlan ipam/host-local ipam/dhcp meta/flannel meta/tuning"
+netplugins="main/ptp main/bridge main/macvlan main/ipvlan ipam/host-local meta/flannel meta/tuning"
 
 # Clean the repo, but save the vendor area
 if [ "x${1:-}" != "x" ] && [ "clean" == "$1" ]; then
@@ -86,16 +86,14 @@ fi
 # Build init
 cd init
 rm -rf vendor
-glide install -v
-cd ..
-go build -o target/rootfs/init init/init.go
+[ -f go.mod ] && go mod vendor || glide install -v
+go build -o ../target/rootfs/init init.go
 
 # Network plugins
-mkdir -p target/rootfs/usr/lib/rkt/plugins/net
-cd init
+mkdir -p ../target/rootfs/usr/lib/rkt/plugins/net
 for i in $netplugins
 do
-    go build ./vendor/github.com/containernetworking/cni/plugins/$i
+    go build github.com/containernetworking/cni/plugins/$i
     mv `echo $i | cut -d / -f 2` ../target/rootfs/usr/lib/rkt/plugins/net
 done
 cd ..
