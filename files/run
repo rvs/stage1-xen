@@ -53,7 +53,11 @@ outconfig=$workpath/out/test.0
 mountpoint=$stage2
 
 rm $outconfig &> /dev/null
-echo "kernel='$workpath/kernel'" >> $outconfig
+if [ -f "$workpath/kernel" ] ; then
+    echo "kernel='$workpath/kernel'" >> $outconfig
+else
+    echo "kernel='/hostfs/boot/kernel'" >> $outconfig
+fi
 echo "ramdisk='$workpath/initrd'" >> $outconfig
 echo "p9=[ 'tag=share_dir,security_model=none,path=$mountpoint' ]" >> $outconfig
 
