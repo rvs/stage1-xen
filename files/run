@@ -12,6 +12,7 @@ gw=""
 route=""
 pvcalls=0
 bridge="xenbr0"
+dhcp=1
 
 for i in $*
 do
@@ -68,6 +69,11 @@ if [ -f "$STAGE1_SEED_XL_CFG" ] ; then
        EXTRA="$EXTRA console=tty0"
     else
        EXTRA="$EXTRA console=hvc0"
+    fi
+    if test $dhcp -ne 0
+    then
+        cp $stage1/udhcpc_script.sh $stage2
+        EXTRA="$EXTRA dhcp=1"
     fi
     echo extra=\'$EXTRA\' >> $outconfig
 else	

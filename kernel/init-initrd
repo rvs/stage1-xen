@@ -39,6 +39,7 @@ ip=`cat /proc/cmdline | grep -o '\bip=[^ ]*' | cut -d = -f 2`
 gw=`cat /proc/cmdline | grep -o '\bgw=[^ ]*' | cut -d = -f 2`
 route=`cat /proc/cmdline | grep -o '\broute=[^ ]*' | cut -d = -f 2`
 pvcalls=`cat /proc/cmdline | grep  'pvcalls=1'`
+dhcp=`cat /proc/cmdline | grep  'dhcp=1'`
 if test "$pvcalls"
 then
 		mkdir -p /mnt/rootfs/etc
@@ -67,6 +68,11 @@ then
 		mkdir -p /mnt/rootfs/etc
 		echo "nameserver 2001:4860:4860::8888" > /mnt/rootfs/etc/resolv.conf
 	fi
+elif test "$dhcp"
+then
+    ip link set dev lo up
+    ip link set dev eth0 up
+    udhcpc --interface=eth0 --script=/mnt/udhcpc_script.sh
 fi
 cmd=`cat /mnt/cmdline`
 echo "Executing $cmd"
