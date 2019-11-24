@@ -98,6 +98,8 @@ else
     fi
 fi    
 
+cp $stage1/launcher.sh $stage2
+chmod +x $stage2/launcher.sh
 echo $cmdline > $mountpoint/cmdline
 export IFS=$'\n'
 stage2manifest=$mountpoint/manifest
@@ -107,6 +109,8 @@ for row in `cat $stage2manifest | jq -c .app.environment[]`; do
   VALUE=$(echo $row | jq -r .value)
   echo export $KEY=\'$VALUE\' >> $stage2env
 done
+WORKDIR=`cat $stage2manifest | jq -r -c .app.workingDirectory`
+echo export WORKDIR=\'$WORKDIR\' >> $stage2env
 
 xl create $gargs $outconfig $STAGE1_XL_OPTS
 domname=$(sed -ne '/^name *=/s/^.*"\(.*\)"/\1/p' < "$outconfig")

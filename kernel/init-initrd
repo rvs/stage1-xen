@@ -74,6 +74,9 @@ then
     ip link set dev eth0 up
     udhcpc --interface=eth0 --script=/mnt/udhcpc_script.sh
 fi
+cp /mnt/cmdline /mnt/rootfs
+cp /mnt/launcher.sh /mnt/rootfs
+chmod +x /mnt/rootfs/launcher.sh
 cmd=`cat /mnt/cmdline`
 echo "Executing $cmd"
 source /mnt/environment
