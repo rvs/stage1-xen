@@ -59,7 +59,13 @@ echo "p9=[ 'tag=share_dir,security_model=none,path=$mountpoint' ]" >> $outconfig
 
 if [ -f "$STAGE1_SEED_XL_CFG" ] ; then
     grep -Ev '^(disk|bootloader|root|extra|kernel)' < "$STAGE1_SEED_XL_CFG" >> $outconfig
-    echo extra=\'console=hvc0 root=9p\' >> $outconfig
+    EXTRA="root=9p"
+    if grep -q 'type.*=.*hvm' "$STAGE1_SEED_XL_CFG" ; then
+       EXTRA="$EXTRA console=tty0"
+    else
+       EXTRA="$EXTRA console=hvc0"
+    fi
+    echo extra=\'$EXTRA\' >> $outconfig
 else	
     echo "memory = 1024" >> $outconfig
     echo "vcpus = 2" >> $outconfig
