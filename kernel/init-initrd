@@ -34,6 +34,8 @@ mkdir /mnt/rootfs/proc &>/dev/null
 mount -o bind /dev /mnt/rootfs/dev
 mount -o bind /sys /mnt/rootfs/sys
 mount -o bind /proc /mnt/rootfs/proc
+mount -t devpts -o gid=5,mode=0620,noexec,nosuid devpts /mnt/rootfs/dev/pts
+mount -t tmpfs -o nodev,nosuid,noexec shm /mnt/rootfs/dev/shm
 
 ip=`cat /proc/cmdline | grep -o '\bip=[^ ]*' | cut -d = -f 2`
 gw=`cat /proc/cmdline | grep -o '\bgw=[^ ]*' | cut -d = -f 2`
@@ -81,4 +83,4 @@ cmd=`cat /mnt/cmdline`
 echo "Executing $cmd"
 source /mnt/environment
 source /mnt/external-environment
-eval chroot /mnt/rootfs $cmd
+eval setsid -c chroot /mnt/rootfs /launcher.sh $cmd <> /dev/console 2>&1

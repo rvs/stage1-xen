@@ -11,6 +11,8 @@ mkdir -p $tmpdir/bin
 mkdir -p $tmpdir/sbin
 mkdir -p $tmpdir/etc
 mkdir -p $tmpdir/dev
+mkdir -p $tmpdir/dev/pts
+mkdir -p $tmpdir/dev/shm
 mkdir -p $tmpdir/proc
 mkdir -p $tmpdir/sys
 mkdir -p $tmpdir/lib
