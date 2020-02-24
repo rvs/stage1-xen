@@ -70,4 +70,5 @@ then
 fi
 cmd=`cat /mnt/cmdline`
 echo "Executing $cmd"
+source /mnt/external-environment
 eval chroot /mnt/rootfs $cmd
