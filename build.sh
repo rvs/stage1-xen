@@ -24,7 +24,7 @@ then
     exit 1
 fi
 
-execs="enter run stop udhcpc_script.sh launcher.sh"
+execs="enter run stop udhcpc_script.sh launcher.sh mount_disk.sh"
 netplugins="main/ptp main/bridge main/macvlan main/ipvlan ipam/host-local meta/flannel meta/tuning"
 
 # Clean the repo, but save the vendor area

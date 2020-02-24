@@ -62,8 +62,12 @@ fi
 echo "ramdisk='$workpath/initrd'" >> $outconfig
 echo "p9=[ 'tag=share_dir,security_model=none,path=$mountpoint' ]" >> $outconfig
 
+if [ -f "$STAGE2_MNT_PTS" ] ; then
+  cp "$STAGE2_MNT_PTS" $stage2/mountPoints
+fi
+
 if [ -f "$STAGE1_SEED_XL_CFG" ] ; then
-    grep -Ev '^(disk|bootloader|root|extra|kernel)' < "$STAGE1_SEED_XL_CFG" >> $outconfig
+    grep -Ev '^(bootloader|root|extra|kernel)' < "$STAGE1_SEED_XL_CFG" >> $outconfig
     EXTRA="root=9p"
     if grep -q 'type.*=.*hvm' "$STAGE1_SEED_XL_CFG" ; then
        EXTRA="$EXTRA console=tty0"
@@ -100,6 +104,8 @@ fi
 
 cp $stage1/launcher.sh $stage2
 chmod +x $stage2/launcher.sh
+cp $stage1/mount_disk.sh $stage2
+chmod +x $stage2/mount_disk.sh
 echo $cmdline > $mountpoint/cmdline
 export IFS=$'\n'
 stage2manifest=$mountpoint/manifest
